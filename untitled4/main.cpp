@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -12,6 +13,12 @@ private:
 
 public:
     void openAccount(const string &name, const string &address, const string &phone, const double &initialDeposit) {
+        ofstream Logbook("logbook.txt");
+        if (!Logbook) {
+            cerr << "Error creating logbook file!" << endl;
+            return;
+        }
+        Logbook << "Account opened for " << name << " with initial deposit of rs." << initialDeposit << endl;
         this->name = name;
         this->address = address;
         this->phone = phone;
@@ -54,14 +61,6 @@ public:
     }
 };
 
-void write_to_logbook(){
-
-}
-
-void read_from_logbook(){
-
-}
-
 int main() {
     cout << "******----BANK OF C PLUS PLUS******----" << endl;
 
@@ -71,7 +70,7 @@ int main() {
     Bank bank;
 
     while (true) {
-        cout << "\n1. Open Account\n2. Deposit Money\n3. Withdraw Money\n4. Display Account\n5. Exit\n";
+        cout << "\n1. Open Account\n2. Deposit Money\n3. Withdraw Money\n4. Display Account\n5. Exit\n 7.Logbook \n 8.Delete Logbook" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore(); // Ignore remaining newline for getline
@@ -105,6 +104,26 @@ int main() {
         }
         else if (choice == 4) {  // Display Account
             bank.displayAccount();
+        }
+        else if (choice == 5){
+            break;
+        }
+        else if (choice == 7){
+            ifstream Logbook("logbook.txt");
+            if (!Logbook) {
+                cerr << "Error opening logbook file!" << endl;
+                continue;
+            }
+            string line;
+            cout << "----- Logbook -----" << endl;
+            while (getline(Logbook, line)) {
+                cout << line << endl;
+            }
+            cout << "-------------------" << endl;
+        }
+        else if (choice ==8){
+            remove("logbook.txt");
+            cout << "Logbook deleted successfully." << endl;
         }
         else {
             cout << "Invalid choice. Please try again." << endl;
